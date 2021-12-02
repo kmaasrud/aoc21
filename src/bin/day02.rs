@@ -1,7 +1,7 @@
 fn a(data: Vec<(String, usize)>) -> usize {
     let mut depth = 0;
     let mut position = 0;
-    
+
     for (direction, add) in data.iter() {
         match direction.as_str() {
             "forward" => position += add,
@@ -18,7 +18,7 @@ fn b(data: Vec<(String, usize)>) -> usize {
     let mut aim = 0;
     let mut depth = 0;
     let mut position = 0;
-    
+
     for (direction, add) in data.iter() {
         match direction.as_str() {
             "forward" => {
@@ -34,7 +34,7 @@ fn b(data: Vec<(String, usize)>) -> usize {
     depth * position
 }
 
-fn main () {
+fn main() {
     let data = load_lines("inputs/day02.txt");
 
     println!("First answer: {}", a(data.clone()));
