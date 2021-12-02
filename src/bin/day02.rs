@@ -38,7 +38,7 @@ fn main() {
     let data = load_lines("inputs/day02.txt");
 
     println!("First answer: {}", a(data.clone()));
-    println!("Second answer: {}", b(data.clone()));
+    println!("Second answer: {}", b(data));
 }
 
 fn load_lines(path: &str) -> Vec<(String, usize)> {
