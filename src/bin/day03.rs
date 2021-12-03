@@ -3,9 +3,7 @@ fn a(log2: usize, nums: &Vec<usize>) -> usize {
 
     for i in 0..=(log2 + 1) {
         let bit = 1 << i;
-        let ones = nums.iter()
-            .filter(|num| *num & bit == bit)
-            .count();
+        let ones = nums.iter().filter(|num| *num & bit == bit).count();
 
         if ones > nums.len() / 2 {
             gamma |= bit;
@@ -21,14 +19,11 @@ fn b(log2: usize, nums: &Vec<usize>) -> usize {
     let mut o2 = nums.clone();
     let mut co2 = nums.to_owned();
 
-    for i in (0..=(log2-1)).rev() {
+    for i in (0..=(log2 - 1)).rev() {
         let bit = 1 << i;
 
-        let count_ones = |nums: &Vec<usize>| -> usize {
-            nums.iter()
-                .filter(|num| *num & bit == bit)
-                .count()
-        };
+        let count_ones =
+            |nums: &Vec<usize>| -> usize { nums.iter().filter(|num| *num & bit == bit).count() };
 
         let filter = |nums: &Vec<usize>, want: usize| -> Vec<usize> {
             nums.iter()
