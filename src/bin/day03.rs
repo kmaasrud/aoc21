@@ -1,27 +1,65 @@
 fn a(log2: usize, nums: &Vec<usize>) -> usize {
     let mut gamma = 0;
+
     for i in 0..=(log2 + 1) {
         let bit = 1 << i;
-        let mut ones = 0;
-        for num in nums {
-            if (num & bit) == bit {
-                ones += 1;
-            }
-        }
+        let ones = nums.iter()
+            .filter(|num| *num & bit == bit)
+            .count();
+
         if ones > nums.len() / 2 {
             gamma |= bit;
         }
     }
+
     let eps = (usize::MAX << log2) ^ !gamma;
-    println!("Gamma: {:b}", gamma);
-    println!("Epsilon: {:b}", eps);
+
     gamma * eps
+}
+
+fn b(log2: usize, nums: &Vec<usize>) -> usize {
+    let mut o2 = nums.clone();
+    let mut co2 = nums.to_owned();
+
+    for i in (0..=(log2-1)).rev() {
+        let bit = 1 << i;
+
+        let count_ones = |nums: &Vec<usize>| -> usize {
+            nums.iter()
+                .filter(|num| *num & bit == bit)
+                .count()
+        };
+
+        let filter = |nums: &Vec<usize>, want: usize| -> Vec<usize> {
+            nums.iter()
+                .filter(|num| *num & bit == want)
+                .map(|num| num.to_owned())
+                .collect()
+        };
+
+        if o2.len() > 1 {
+            let ones = count_ones(&o2);
+            let zeros = o2.len() - ones;
+            let want = if ones >= zeros { bit } else { 0 };
+            o2 = filter(&o2, want);
+        }
+
+        if co2.len() > 1 {
+            let ones = count_ones(&co2);
+            let zeros = co2.len() - ones;
+            let want = if ones < zeros { bit } else { 0 };
+            co2 = filter(&co2, want);
+        }
+    }
+
+    o2[0] * co2[0]
 }
 
 fn main() {
     let (log2, nums) = load_lines("inputs/day03.txt");
 
     println!("First answer: {}", a(log2, &nums));
+    println!("Second answer: {}", b(log2, &nums));
 }
 
 fn load_lines(path: &str) -> (usize, Vec<usize>) {
@@ -40,4 +78,5 @@ fn test() {
     let (log2, nums) = load_lines("inputs/day03_test.txt");
 
     assert_eq!(a(log2, &nums), 198);
+    assert_eq!(b(log2, &nums), 230);
 }
