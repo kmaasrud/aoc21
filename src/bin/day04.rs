@@ -1,4 +1,4 @@
-fn a(draws: Vec<usize>, boards: Vec<Vec<usize>>) -> usize {
+fn a(draws: &Vec<usize>, boards: &Vec<Vec<usize>>) -> usize {
     let mut shortest = usize::MAX;
     let mut shortest_board = Vec::<usize>::new();
 
@@ -19,12 +19,45 @@ fn a(draws: Vec<usize>, boards: Vec<Vec<usize>>) -> usize {
         }
     }
 
-    let score: usize = shortest_board
+    let unmarked_sum: usize = shortest_board
         .iter()
         .filter(|x| draws[..shortest + 1].iter().all(|draw| x != &draw))
         .sum();
 
-    score * draws[shortest]
+    unmarked_sum * draws[shortest]
+}
+
+fn b(draws: Vec<usize>, boards: Vec<Vec<usize>>) -> usize {
+    let mut longest = usize::MIN;
+    let mut longest_board = Vec::<usize>::new();
+
+    for board in boards {
+        let mut shortest = usize::MAX;
+        for i in 0..5 {
+            let mut coli = col(&board, i);
+            let mut rowi = row(&board, i);
+            for (i, draw) in draws.iter().enumerate() {
+                coli.retain(|x| x != &draw);
+                rowi.retain(|x| x != &draw);
+                if i > shortest {
+                    break;
+                } else if (coli.is_empty() || rowi.is_empty()) && i < shortest {
+                    shortest = i;
+                }
+            }
+        }
+        if shortest > longest {
+            longest = shortest;
+            longest_board = board.clone();
+        }
+    }
+
+    let unmarked_sum: usize = longest_board
+        .iter()
+        .filter(|x| draws[..longest + 1].iter().all(|draw| x != &draw))
+        .sum();
+
+    unmarked_sum * draws[longest]
 }
 
 fn col(board: &Vec<usize>, i: usize) -> Vec<&usize> {
@@ -38,7 +71,8 @@ fn row(board: &Vec<usize>, i: usize) -> Vec<&usize> {
 fn main() {
     let (draws, boards) = load_boards("inputs/day04.txt");
 
-    println!("First answer: {}", a(draws, boards));
+    println!("First answer: {}", a(&draws, &boards));
+    println!("First answer: {}", b(draws, boards));
 }
 
 fn load_boards(path: &str) -> (Vec<usize>, Vec<Vec<usize>>) {
@@ -60,7 +94,7 @@ fn load_boards(path: &str) -> (Vec<usize>, Vec<Vec<usize>>) {
                 .iter()
                 .skip(1)
                 .map(|line| -> Vec<usize> {
-                    line.split_ascii_whitespace()
+                    line.split_whitespace()
                         .filter_map(|num| num.parse::<usize>().ok())
                         .collect()
                 })
@@ -76,5 +110,6 @@ fn load_boards(path: &str) -> (Vec<usize>, Vec<Vec<usize>>) {
 fn test() {
     let (draws, boards) = load_boards("inputs/day04_test.txt");
 
-    assert_eq!(a(draws, boards), 4512);
+    assert_eq!(a(&draws, &boards), 4512);
+    assert_eq!(b(draws, boards), 1924);
 }
