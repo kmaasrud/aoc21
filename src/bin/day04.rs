@@ -9,13 +9,11 @@ fn a(draws: Vec<usize>, boards: Vec<Vec<usize>>) -> usize {
             for (i, draw) in draws.iter().enumerate() {
                 coli.retain(|x| x != &draw);
                 rowi.retain(|x| x != &draw);
-                match (coli.is_empty(), rowi.is_empty()) {
-                    _ if i > shortest => break,
-                    (true, _) | (_, true) if i < shortest => {
-                        shortest = i;
-                        shortest_board = board.clone();
-                    }
-                    _ => {},
+                if i > shortest {
+                    break;
+                } else if (coli.is_empty() || rowi.is_empty()) && i < shortest {
+                    shortest = i;
+                    shortest_board = board.clone();
                 }
             }
         }
@@ -23,7 +21,7 @@ fn a(draws: Vec<usize>, boards: Vec<Vec<usize>>) -> usize {
 
     let score: usize = shortest_board
         .iter()
-        .filter(|x| draws[..shortest+1].iter().all(|draw| x != &draw))
+        .filter(|x| draws[..shortest + 1].iter().all(|draw| x != &draw))
         .sum();
 
     score * draws[shortest]
@@ -39,7 +37,7 @@ fn row(board: &Vec<usize>, i: usize) -> Vec<&usize> {
 
 fn main() {
     let (draws, boards) = load_boards("inputs/day04.txt");
-    
+
     println!("First answer: {}", a(draws, boards));
 }
 
@@ -58,13 +56,16 @@ fn load_boards(path: &str) -> (Vec<usize>, Vec<Vec<usize>>) {
         .collect::<Vec<&str>>()
         .chunks(6)
         .map(|chunk| {
-            chunk.iter().skip(1).map(|line| -> Vec<usize> {
-                line.split_ascii_whitespace()
-                    .filter_map(|num| num.parse::<usize>().ok())
-                    .collect()
-            })
-            .flatten()
-            .collect()
+            chunk
+                .iter()
+                .skip(1)
+                .map(|line| -> Vec<usize> {
+                    line.split_ascii_whitespace()
+                        .filter_map(|num| num.parse::<usize>().ok())
+                        .collect()
+                })
+                .flatten()
+                .collect()
         })
         .collect();
 
