@@ -1,4 +1,4 @@
-fn a(log2: usize, nums: &Vec<usize>) -> usize {
+fn a(log2: usize, nums: &[usize]) -> usize {
     let mut gamma = 0;
 
     for i in 0..=(log2 + 1) {
@@ -15,8 +15,8 @@ fn a(log2: usize, nums: &Vec<usize>) -> usize {
     gamma * eps
 }
 
-fn b(log2: usize, nums: &Vec<usize>) -> usize {
-    let mut o2 = nums.clone();
+fn b(log2: usize, nums: &[usize]) -> usize {
+    let mut o2 = nums.to_owned();
     let mut co2 = nums.to_owned();
 
     for i in (0..=(log2 - 1)).rev() {

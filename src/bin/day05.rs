@@ -3,8 +3,9 @@ type Line = (Point, Point);
 
 fn count_intersections(mut crossed_points: Vec<Point>) -> usize {
     crossed_points.sort_unstable();
-    crossed_points.iter()
-        .fold((0, (0,0), (0, 0)), |(acc, prev, prevprev), next| {
+    crossed_points
+        .iter()
+        .fold((0, (0, 0), (0, 0)), |(acc, prev, prevprev), next| {
             if *next == prev && prev != prevprev {
                 (acc + 1, *next, prev)
             } else {
@@ -14,7 +15,7 @@ fn count_intersections(mut crossed_points: Vec<Point>) -> usize {
         .0
 }
 
-fn a(lines: &Vec<Line>) -> usize {
+fn a(lines: &[Line]) -> usize {
     let mut crossed_points = Vec::<Point>::new();
     for line in lines {
         match line {
@@ -31,11 +32,11 @@ fn a(lines: &Vec<Line>) -> usize {
             _ => {}
         }
     }
-    
+
     count_intersections(crossed_points)
 }
 
-fn b(lines: &Vec<Line>) -> usize {
+fn b(lines: &[Line]) -> usize {
     let mut crossed_points = Vec::<Point>::new();
     for line in lines {
         match line {

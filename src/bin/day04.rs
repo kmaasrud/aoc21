@@ -1,11 +1,11 @@
-fn a(draws: &Vec<usize>, boards: &Vec<Vec<usize>>) -> usize {
+fn a(draws: &[usize], boards: &[Vec<usize>]) -> usize {
     let mut shortest = usize::MAX;
     let mut shortest_board = Vec::<usize>::new();
 
     for board in boards {
         for i in 0..5 {
-            let mut coli = col(&board, i);
-            let mut rowi = row(&board, i);
+            let mut coli = col(board, i);
+            let mut rowi = row(board, i);
             for (i, draw) in draws.iter().enumerate() {
                 coli.retain(|x| x != &draw);
                 rowi.retain(|x| x != &draw);
@@ -60,11 +60,11 @@ fn b(draws: Vec<usize>, boards: Vec<Vec<usize>>) -> usize {
     unmarked_sum * draws[longest]
 }
 
-fn col(board: &Vec<usize>, i: usize) -> Vec<&usize> {
+fn col(board: &[usize], i: usize) -> Vec<&usize> {
     board.iter().skip(i).step_by(5).take(5).collect()
 }
 
-fn row(board: &Vec<usize>, i: usize) -> Vec<&usize> {
+fn row(board: &[usize], i: usize) -> Vec<&usize> {
     board.iter().skip(5 * i).take(5).collect()
 }
 
@@ -82,7 +82,7 @@ fn load_boards(path: &str) -> (Vec<usize>, Vec<Vec<usize>>) {
     let draws = input_lines
         .next()
         .unwrap()
-        .split(",")
+        .split(',')
         .filter_map(|draw| draw.parse::<usize>().ok())
         .collect();
 
