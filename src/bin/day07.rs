@@ -9,10 +9,24 @@ fn a(crab_pos: &[i32]) -> i32 {
         .fold(0, |acc, x| acc + (x - median).abs())
 }
 
+fn b(crab_pos: &[i32]) -> i32 {
+    let mut minimized = i32::MAX;
+    for mid in 0..*crab_pos.iter().max().unwrap() {
+        let new = crab_pos.iter()
+            .fold(0, |acc, x| acc + (1..=(x - mid).abs()).sum::<i32>());
+
+        if new < minimized {
+            minimized = new;
+        }
+    }
+    minimized
+}
+
 fn main() {
     let crab_pos = load_crab_pos("inputs/day07.txt");
 
     println!("First answer: {}", a(&crab_pos));
+    println!("Second answer: {}", b(&crab_pos));
 }
 
 fn load_crab_pos(path: &str) -> Vec<i32> {
@@ -26,6 +40,8 @@ fn load_crab_pos(path: &str) -> Vec<i32> {
 #[test]
 fn test() {
     let crab_pos = load_crab_pos("inputs/day07_test.txt");
+    println!("Avg: {}", crab_pos.iter().sum::<i32>() / crab_pos.len() as i32);
 
     assert_eq!(a(&crab_pos), 37);
+    assert_eq!(b(&crab_pos), 168);
 }
