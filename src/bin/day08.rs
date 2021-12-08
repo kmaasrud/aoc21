@@ -19,7 +19,7 @@ fn b(entries: &[(Vec<String>, Vec<String>)]) -> usize {
 
     fn sort_string(s: &str) -> String {
         let mut chars = s.chars().collect::<Vec<char>>();
-        chars.sort();
+        chars.sort_unstable();
         String::from_iter(chars)
     }
 
@@ -122,8 +122,8 @@ fn load_lines(path: &str) -> Vec<(Vec<String>, Vec<String>)> {
         .map(|line| {
             let (pattern, output) = line.split_once('|').unwrap();
             (
-                pattern.trim().split(" ").map(String::from).collect(),
-                output.trim().split(" ").map(String::from).collect(),
+                pattern.trim().split(' ').map(String::from).collect(),
+                output.trim().split(' ').map(String::from).collect(),
             )
         })
         .collect()
