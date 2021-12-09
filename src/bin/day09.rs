@@ -21,7 +21,7 @@ fn b(map: &[Vec<usize>]) -> usize {
     let maxy = map.len() - 1;
 
     // Find coordinates of lowest points
-    let mut lowest_coords: Vec<(usize, usize)> = Vec::new();
+    let mut lowest_coords: Vec<Point> = Vec::new();
     for y in 1..maxy {
         for x in 1..maxx {
             let this = map[y][x];
@@ -43,12 +43,10 @@ fn b(map: &[Vec<usize>]) -> usize {
             .cloned()
             .collect();
 
-        if points.len() > 0 {
-            basin.append(&mut points.clone());
-            points
-                .iter()
-                .for_each(|(y, x)| find_basin(*y, *x, &mut basin, map));
-        }
+        basin.extend(points.clone().iter());
+        points
+            .iter()
+            .for_each(|(y, x)| find_basin(*y, *x, &mut basin, map));
     }
 
     // Make list of basin sizes
