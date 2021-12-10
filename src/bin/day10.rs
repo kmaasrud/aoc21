@@ -2,13 +2,13 @@ fn matching(c: &char) -> char {
     match c {
         '(' => ')',
         ')' => '(',
-        '[' =>  ']',
-        ']' =>  '[',
+        '[' => ']',
+        ']' => '[',
         '{' => '}',
         '}' => '{',
         '<' => '>',
         '>' => '<',
-        _ => *c
+        _ => *c,
     }
 }
 
@@ -35,7 +35,7 @@ fn a(lines: &[String]) -> (usize, Vec<String>) {
                     if stack.pop() != Some(matching(&c)) {
                         sum += val(c);
                         non_corrupt.pop();
-                        break
+                        break;
                     }
                 }
             }
@@ -69,17 +69,18 @@ fn b(lines: &[String]) -> usize {
             }
         }
 
-        completion_vals.push(stack
-            .iter()
-            .rev()
-            .map(matching)
-            .map(val)
-            .fold(0, |acc, x| 5 * acc + x));
+        completion_vals.push(
+            stack
+                .iter()
+                .rev()
+                .map(matching)
+                .map(val)
+                .fold(0, |acc, x| 5 * acc + x),
+        );
     }
     completion_vals.sort_unstable();
     completion_vals[completion_vals.len() / 2]
 }
-
 
 fn main() {
     let lines = load_lines("inputs/day10.txt");
