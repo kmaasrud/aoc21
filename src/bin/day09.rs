@@ -33,7 +33,7 @@ fn b(map: &[Vec<usize>]) -> usize {
     }
 
     // Find a basin recursively from a given lowest point
-    fn find_basin(y: usize, x: usize, mut basin: &mut Basin, map: &[Vec<usize>]) {
+    fn find_basin(y: usize, x: usize, basin: &mut Basin, map: &[Vec<usize>]) {
         // All non-duplicate surrounding points bigger than (x, y) and not equal to 9
         let points: Vec<Point> = [(y + 1, x), (y, x + 1), (y - 1, x), (y, x - 1)]
             .iter()
@@ -43,10 +43,10 @@ fn b(map: &[Vec<usize>]) -> usize {
             .cloned()
             .collect();
 
-        basin.extend(points.clone().iter());
+        basin.extend(points.iter());
         points
             .iter()
-            .for_each(|(y, x)| find_basin(*y, *x, &mut basin, map));
+            .for_each(|(y, x)| find_basin(*y, *x, basin, map));
     }
 
     // Make list of basin sizes
